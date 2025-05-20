@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>FakeXpose | Project Overview</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f8f9fa;
+      color: #333;
+    }
+
+    header {
+      background-color: #343a40;
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.5em;
+      letter-spacing: 1px;
+    }
+
+    section {
+      padding: 40px 60px;
+    }
+
+    section h2 {
+      color: #007BFF;
+      margin-bottom: 10px;
+    }
+
+    section p {
+      line-height: 1.6;
+      font-size: 1.1em;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .gallery img {
+      width: 100%;
+      border-radius: 10px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #343a40;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>FakeXpose</h1>
+  </header>
+
+  <section>
+    <h2>🔍 Scope</h2>
+    <p>FakeXpose aims to identify whether a news article is real or fake using both a historical database and advanced AI validation via Google's Gemini API.</p>
+  </section>
+
+  <section>
+    <h2>🎯 Goal</h2>
+    <p>To build a web-based tool that helps users instantly verify the authenticity of news articles, empowering them to avoid misinformation.</p>
+  </section>
+
+  <section>
+    <h2>📝 Brief Description</h2>
+    <p>
+      FakeXpose is a Flask-powered web application that lets users input news headlines or articles. It checks against an internal dataset and, if necessary, uses Gemini AI to classify the news as "Real" or "Fake". It continuously learns by saving newly verified articles to the database.
+    </p>
+  </section>
+
+  <section>
+    <h2>🖼️ Project Screenshots</h2>
+    <div class="gallery">
+      <img src="/static/fake.jpg" alt="Fake News Detected">
+      <img src="/static/real.jpg" alt="Real News Detected">
+      <img src="/static/background.jpg" alt="Homepage Screenshot">
+      <img src="/static/logo.jpg" alt="FakeXpose Logo">
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 FakeXpose Team | All rights reserved.
+  </footer>
+
+</body>
+</html>

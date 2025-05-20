@@ -1,0 +1,25 @@
+{"correct": 2, "wrong": 1}{"feedback": "positive", "prediction": "\u2705 This News is Real \u2705", "news_text": "", "timestamp": "2025-05-03T17:57:32.369219"}
+{"feedback": "positive", "prediction": "\u2705 This News is Real \u2705", "news_text": "", "timestamp": "2025-05-03T18:00:03.066483"}
+{"feedback": "positive", "prediction": "\u2705 This News is Real \u2705", "news_text": "", "timestamp": "2025-05-03T18:02:37.786372"}
+{"feedback": "positive", "prediction": "\u2705 This News is Real \u2705", "news_text": "", "timestamp": "2025-05-03T18:05:18.663854"}
+{"feedback": "negative", "prediction": "\ud83d\udea8 Fake News Detected! \ud83d\udea8", "news_text": "", "timestamp": "2025-05-03T18:05:50.439464"}
+{"feedback": "negative", "prediction": "\u2705 This News is Real \u2705", "news_text": "", "timestamp": "2025-05-03T18:08:20.212798"}
+{"feedback": "positive", "prediction": "\u2705 This News is Real \u2705", "news_text": "", "timestamp": "2025-05-03T18:08:38.491527"}
+{"feedback": "positive", "prediction": "\u2705 This News is Real \u2705", "news_text": "", "timestamp": "2025-05-03T18:10:39.667761"}
+{"feedback": "negative", "prediction": "", "news_text": "", "timestamp": "2025-05-03T18:17:36.546766"}
+{"feedback": "positive", "prediction": "", "news_text": "", "timestamp": "2025-05-04T00:58:36.269102"}
+{"feedback": "positive", "prediction": "", "news_text": "", "timestamp": "2025-05-05T14:40:10.832811"}
+{"feedback": "positive", "prediction": "", "news_text": "", "timestamp": "2025-05-05T15:18:10.656089"}
+{"feedback": "negative", "prediction": "", "news_text": "", "timestamp": "2025-05-05T17:05:51.669959"}
+{"feedback": "positive", "prediction": "", "news_text": "", "timestamp": "2025-05-05T17:28:33.749297"}
+{"feedback": "positive", "prediction": "", "news_text": "", "timestamp": "2025-05-05T17:31:08.649982"}
+{"feedback": "positive", "prediction": "", "news_text": "", "timestamp": "2025-05-05T17:41:42.654615"}
+{"feedback": "positive", "prediction": "", "news_text": "", "timestamp": "2025-05-06T10:42:52.082795"}
+{"feedback": "positive", "prediction": "", "news_text": "", "timestamp": "2025-05-06T10:43:34.406953"}
+{"feedback": "positive", "prediction": "", "news_text": "", "timestamp": "2025-05-06T10:50:28.271175"}
+{"feedback": "positive", "prediction": "", "news_text": "", "timestamp": "2025-05-14T19:48:33.761059"}
+{"feedback": "negative", "prediction": "", "news_text": "", "timestamp": "2025-05-14T19:49:34.091109"}
+{"feedback": "negative", "prediction": "", "news_text": "", "timestamp": "2025-05-14T20:13:44.191562"}
+{"feedback": "negative", "prediction": "", "news_text": "", "timestamp": "2025-05-16T17:23:46.361170"}
+{"feedback": "positive", "prediction": "", "news_text": "", "timestamp": "2025-05-16T17:24:16.506030"}
+{"feedback": "positive", "prediction": "", "news_text": "", "timestamp": "2025-05-20T12:39:06.633524"}

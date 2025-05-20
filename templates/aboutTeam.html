@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Team - FakeXpose Project</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .team-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 40px;
+            gap: 20px;
+        }
+
+        .team-member {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 200px;
+        }
+
+        .team-img {
+            width: 100%;
+            height: auto;
+            border-radius: 50%;
+            margin-bottom: 15px;
+        }
+
+        .efforts h3 {
+            margin: 0;
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        .efforts p {
+            font-size: 1em;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .team-container {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="team-container">
+        <div class="team-member">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAe9NZZk7nUE_anJir2Scf7tsqMHRdEpCbJg&s" alt="Team Member 1" class="team-img">
+            <div class="efforts">
+                <h3>Team Member 1</h3>
+                <p>Efforts: Developed the fake news detection model.</p>
+            </div>
+        </div>
+
+        <div class="team-member">
+            <img src="team_member_2.jpg" alt="Team Member 2" class="team-img">
+            <div class="efforts">
+                <h3>Team Member 2</h3>
+                <p>Efforts: Implemented the front-end UI for news input and output.</p>
+            </div>
+        </div>
+
+        <div class="team-member">
+            <img src="team_member_3.jpg" alt="Team Member 3" class="team-img">
+            <div class="efforts">
+                <h3>Team Member 3</h3>
+                <p>Efforts: Worked on database integration and API connections.</p>
+            </div>
+        </div>
+
+        <div class="team-member">
+            <img src="team_member_4.jpg" alt="Team Member 4" class="team-img">
+            <div class="efforts">
+                <h3>Team Member 4</h3>
+                <p>Efforts: Enhanced the project's accuracy and performance.</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

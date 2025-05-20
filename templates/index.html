@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FakeXpose</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="static/style.css">
+    <script src="/static/script.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-cloud@1.2.5/build/d3.layout.cloud.min.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</head>
+<body>
+    <!-- Hover zone for sidebar activation -->
+    <div class="sidebar-hover-zone" id="sidebarHoverZone"></div>
+    <!-- Left Sidebar (no rail, just sidebar) -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-plan-pill">OPTIONS</div>
+        <nav class="sidebar-nav" aria-label="Sidebar Navigation">
+            <ul>
+                <li><a href="#" class="sidebar-link active" data-tooltip="Home"><i class="fas fa-home"></i><span class="sidebar-label">Home</span></a></li>
+                <li><a href="#" class="sidebar-link" data-tooltip="About"><i class="fas fa-info-circle"></i><span class="sidebar-label">Rules</span></a></li>
+                <li><a href="#" class="sidebar-link" data-tooltip="Team"><i class="fas fa-users"></i><span class="sidebar-label">Team</span></a></li>
+                <li><a href="#" class="sidebar-link" data-tooltip="Tech"><i class="fas fa-microchip"></i><span class="sidebar-label">Tech</span></a></li>
+                <li><a href="#" class="sidebar-link" data-tooltip="Stats"><i class="fas fa-chart-bar"></i><span class="sidebar-label">Stats</span></a></li>
+                
+            </ul>
+        </nav>
+    </aside>
+
+    <div class="main-content" id="mainContent">
+    <div class="logo-container">
+        <div class="logo-wrapper">
+            <div class="logo-icon">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <div class="logo-text">
+                <span class="logo-title">Fake<span class="highlight">X</span>pose</span>
+                <span class="logo-tagline">Unmasking the Truth</span>
+            </div>
+        </div>
+    </div>
+    <div class="input-container">
+        <textarea id="newsInput" placeholder="Enter news text here..."></textarea>
+            <div class="button-container">
+        <button id="checkNewsBtn">Check News</button>
+                <label for="uploadFileBtn" class="upload-btn">
+                    <i class="fas fa-upload"></i> Upload
+                    <input type="file" id="uploadFileBtn" accept=".txt,.doc,.docx,.pdf" style="display:none;">
+                </label>
+        <button id="hideResultBtn" class="hide-btn">Hide Result</button>
+            </div>
+        <div class="loader"></div>
+    </div>
+
+    <!-- Instruction Modal -->
+    <div class="instruction-modal" id="instructionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>How to Use FakeXpose</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="instruction-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Enter News Text</h3>
+                        <p>Copy and paste any news article or text you want to verify. The text should be at least 100 characters long for better accuracy.</p>
+                    </div>
+                </div>
+                <div class="instruction-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Click Check News</h3>
+                        <p>Press the "Check News" button to analyze the text. Our AI will process the content and determine its authenticity.</p>
+                    </div>
+                </div>
+                <div class="instruction-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>View Results</h3>
+                        <p>Wait for the analysis to complete. You'll see a visual indicator showing whether the news is real or fake.</p>
+                    </div>
+                </div>
+                <div class="instruction-step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Provide Feedback</h3>
+                        <p>Help us improve by giving feedback on the prediction using the thumbs up or down buttons.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Result Display Section -->
+    <div id="result">
+        <div id="predictionResult"></div>
+        <div class="feedback-section" style="display: none;">
+            <div class="feedback-container">
+                <p class="feedback-question">Was this prediction helpful?</p>
+                <div class="feedback-buttons">
+                    <button id="thumbsUp" class="feedback-btn">
+                        <span class="emoji">👍</span>
+                        <span class="feedback-text">Helpful</span>
+                    </button>
+                    <button id="thumbsDown" class="feedback-btn">
+                        <span class="emoji">👎</span>
+                        <span class="feedback-text">Not Helpful</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Coin Flip Animation -->
+    <div class="coin-flip-container">
+        <div class="coin">
+            <div class="front">
+                <img src="/static/real.jpg" alt="Real News" class="coin-image">
+            </div>
+            <div class="back">
+                <img src="/static/fake.jpg" alt="Fake News" class="coin-image">
+            </div>
+        </div>
+    </div>
+
+    <!-- Result Image Container -->
+    <div id="resultImageContainer" class="result-image-container">
+        <img id="resultImage" class="result-image" alt="Result">
+    </div>
+
+    <!-- Feedback Popup Modal -->
+    <div class="feedback-popup" id="feedbackPopup">
+        <div class="popup-content">
+            <div class="popup-icon positive-icon">✨</div>
+            <div class="popup-icon negative-icon" style="display: none;">💡</div>
+            <h3 class="popup-title positive-title">Thank You!</h3>
+            <h3 class="popup-title negative-title" style="display: none;">We'll Improve!</h3>
+            <p class="popup-message positive-message">Your feedback helps us improve our service.</p>
+            <p class="popup-message negative-message" style="display: none;">We appreciate your honesty. We'll work to make it better!</p>
+            <div class="popup-emoji positive-emoji">🎉</div>
+            <div class="popup-emoji negative-emoji" style="display: none;">💪</div>
+            <button class="popup-close">Continue</button>
+        </div>
+    </div>
+    </div>
+
+    <!-- Modal Popup for File Errors -->
+    <div class="modal-overlay" id="fileErrorModal">
+        <div class="modal-popup">
+            <div class="modal-icon">🚫</div>
+            <div class="modal-title">Invalid File Type</div>
+            <div class="modal-message">Please upload a .txt, .pdf, or .doc/.docx file only.</div>
+            <button class="modal-close" id="closeModalBtn">OK</button>
+        </div>
+    </div>
+
+    <!-- Rules Overlay Panel -->
+    <div class="rules-overlay" id="rulesOverlay">
+        <div class="rules-container">
+            <div class="rules-div" id="lengthNotice">
+                <div class="rules-icon">✅</div>
+                <div class="rules-content">
+                    <h3>Length Notice</h3>
+                    <p>Minimum length should be 20 characters for better results.</p>
+                </div>
+            </div>
+            <div class="rules-div" id="uploadInstructions">
+                <div class="rules-icon">📤</div>
+                <div class="rules-content">
+                    <h3>Upload Instructions</h3>
+                    <p>Only .txt, .docx, and .pdf files are supported for upload.</p>
+                </div>
+            </div>
+            <div class="rules-div" id="accuracyNotice">
+                <div class="rules-icon">⚠️</div>
+                <div class="rules-content">
+                    <h3>Accuracy Notice</h3>
+                    <p>We cannot assure 100% result accuracy.</p>
+                </div>
+            </div>
+            <button class="back-button" id="rulesBackBtn">Back</button>
+        </div>
+    </div>
+
+    <!-- Team Overlay Panel -->
+    <div class="team-overlay" id="teamOverlay">
+        <div class="team-container">
+            <div class="team-grid">
+                <div class="top-row">
+                    <div class="team-member" id="member1">
+                        <div class="member-circle">
+                            <img src="https://img.lovepik.com/png/20231125/man-avatar-image-for-profile-child-diverse-guy_693690_wh860.png" alt="Team Member 1">
+                            <div class="shine-effect"></div>
+                        </div>
+                        <h3 class="member-name">Akshay Kumar Sood</h3>
+                    </div>
+                    <div class="team-member" id="member2">
+                        <div class="member-circle">
+                            <img src="https://www.shutterstock.com/shutterstock/photos/619089038/display_1500/stock-vector-male-face-avatar-man-with-beard-in-the-suit-shirt-and-necktie-portrait-businessman-icon-vector-619089038.jpg" alt="Team Member 2">
+                            <div class="shine-effect"></div>
+                        </div>
+                        <h3 class="member-name">Aditiya Lakhanpal</h3>
+                    </div>
+                    <div class="team-member" id="member3">
+                        <div class="member-circle">
+                            <img src="https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740" alt="Team Member 3">
+                            <div class="shine-effect"></div>
+                        </div>
+                        <h3 class="member-name">Akshad </h3>
+                    </div>
+                </div>
+                <div class="bottom-row">
+                    <div class="team-member" id="member4">
+                        <div class="member-circle">
+                            <img src="https://img.freepik.com/premium-vector/male-face-avatar-icon-set-flat-design-social-media-profiles_1281173-3806.jpg?semt=ais_hybrid&w=740" alt="Team Member 4">
+                            <div class="shine-effect"></div>
+                        </div>
+                        <h3 class="member-name">Akshit</h3>
+                    </div>
+                </div>
+            </div>
+            <button class="back-button" id="teamBackBtn">Back</button>
+        </div>
+    </div>
+
+    <!-- Tech Overlay Panel -->
+    <div class="tech-overlay" id="techOverlay">
+        <div class="tech-container">
+            <div class="tech-grid">
+                <div class="tech-section">
+                    <div class="tech-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>AI & Machine Learning</h3>
+                    <div class="tech-details">
+                        <p>Advanced NLP models for text analysis</p>
+                        <p>Real-time prediction algorithms</p>
+                        <p>Continuous learning from user feedback</p>
+                    </div>
+                </div>
+                <div class="tech-section">
+                    <div class="tech-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>Frontend Technology</h3>
+                    <div class="tech-details">
+                        <p>Modern HTML5 & CSS3</p>
+                        <p>JavaScript and Flask</p>
+                        <p>Responsive design principles</p>
+                    </div>
+                </div>
+                <div class="tech-section">
+                    <div class="tech-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h3>Dataset</h3>
+                    <div class="tech-details">
+                        <p>Python-based </p>
+                        <p>Fake news detection dataset</p>
+                        <p>True.csv and Fake.csv</p>
+                    </div>
+                </div>
+                <div class="tech-section">
+                    <div class="tech-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Library Used</h3>
+                    <div class="tech-details">
+                        <p>Flask - Web Framework</p>
+                        <p>Pandas - Data Processing</p>
+                        <p>Scikit-learn - Machine Learning</p>
+                    </div>
+                </div>
+            </div>
+            <button class="back-button" id="techBackBtn">Back</button>
+        </div>
+    </div>
+
+    <!-- Stats Overlay Panel -->
+    <div class="stats-overlay" id="statsOverlay">
+        <div class="stats-container">
+            <div class="stats-grid">
+                <div class="stats-section">
+                    <h3>Time-based Fake vs Real Trend</h3>
+                    <canvas id="timeTrendChart"></canvas>
+                </div>
+                <div class="stats-section">
+                    <h3>Model Prediction Breakdown</h3>
+                    <canvas id="predictionChart"></canvas>
+                </div>
+                <div class="stats-section">
+                    <h3>News Categories Distribution</h3>
+                    <canvas id="categoryChart"></canvas>
+                </div>
+                <div class="stats-section">
+                    <h3>Word Cloud Analysis</h3>
+                    <div id="wordCloud"></div>
+                </div>
+                <div class="stats-section">
+                    <h3>Prediction Accuracy Over Time</h3>
+                    <canvas id="accuracyChart"></canvas>
+                </div>
+                <div class="stats-section">
+                    <h3>User Feedback Analysis</h3>
+                    <canvas id="feedbackChart"></canvas>
+                </div>
+            </div>
+            <button class="back-button" id="statsBackBtn">Back</button>
+        </div>
+    </div>
+
+    <!-- Profile Overlay Panel -->
+    <div class="profile-overlay" id="profileOverlay">
+        <div class="profile-container">
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <img src="https://i.pravatar.cc/150" alt="User Avatar">
+                    <div class="profile-status online"></div>
+                </div>
+                <div class="profile-info">
+                    <h2>User Profile</h2>
+                    <p class="profile-email">user@example.com</p>
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <span class="stat-value">0</span>
+                            <span class="stat-label">Predictions</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">0%</span>
+                            <span class="stat-label">Accuracy</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">0</span>
+                            <span class="stat-label">Feedback</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-content">
+                <div class="profile-section">
+                    <h3>Recent Activity</h3>
+                    <div class="activity-timeline">
+                        <!-- Activity items will be added dynamically -->
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h3>Prediction History</h3>
+                    <div class="prediction-history">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Text</th>
+                                    <th>Prediction</th>
+                                    <th>Result</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- History items will be added dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h3>Category Analysis</h3>
+                    <div class="category-analysis">
+                        <canvas id="userCategoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <button class="back-button" id="profileBackBtn">Back</button>
+        </div>
+    </div>
+
+    <style>
+    .stats-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        z-index: 1000;
+        overflow-y: auto;
+    }
+
+    .stats-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .stats-section {
+        background: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e0e0e0;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stats-section:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        border-color: #007bff;
+    }
+
+    .stats-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #007bff, #00ff88);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .stats-section:hover::before {
+        opacity: 1;
+    }
+
+    .stats-section h3 {
+        margin-bottom: 1rem;
+        color: #333;
+        font-size: 1.2rem;
+        text-align: center;
+        position: relative;
+        padding-bottom: 0.5rem;
+    }
+
+    .stats-section h3::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 50px;
+        height: 2px;
+        background: linear-gradient(90deg, #007bff, #00ff88);
+    }
+
+    #wordCloud {
+        width: 100%;
+        height: 300px;
+        background: #fff;
+        border-radius: 8px;
+        position: relative;
+    }
+
+    .word-cloud-text {
+        cursor: pointer;
+        transition: fill 0.3s ease;
+    }
+
+    .word-cloud-text.active {
+        fill: #007bff !important;
+        font-weight: bold;
+    }
+
+    .word-cloud-tooltip {
+        position: absolute;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 4px;
+        font-size: 14px;
+        pointer-events: none;
+        z-index: 1000;
+        display: none;
+    }
+
+    @media (max-width: 768px) {
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .profile-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        z-index: 1000;
+        overflow-y: auto;
+    }
+
+    .profile-container {
+        max-width: 1000px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .profile-header {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        margin-bottom: 2rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid #eee;
+    }
+
+    .profile-avatar {
+        position: relative;
+        width: 120px;
+        height: 120px;
+    }
+
+    .profile-avatar img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #007bff;
+    }
+
+    .profile-status {
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        border: 2px solid #fff;
+    }
+
+    .profile-status.online {
+        background: #28a745;
+    }
+
+    .profile-info {
+        flex: 1;
+    }
+
+    .profile-info h2 {
+        margin: 0;
+        color: #333;
+        font-size: 1.8rem;
+    }
+
+    .profile-email {
+        color: #666;
+        margin: 0.5rem 0;
+    }
+
+    .profile-stats {
+        display: flex;
+        gap: 2rem;
+        margin-top: 1rem;
+    }
+
+    .stat-item {
+        text-align: center;
+    }
+
+    .stat-value {
+        display: block;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #007bff;
+    }
+
+    .stat-label {
+        color: #666;
+        font-size: 0.9rem;
+    }
+
+    .profile-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+    }
+
+    .profile-section {
+        background: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-section h3 {
+        margin: 0 0 1rem 0;
+        color: #333;
+        font-size: 1.2rem;
+    }
+
+    .activity-timeline {
+        position: relative;
+        padding-left: 2rem;
+    }
+
+    .activity-item {
+        position: relative;
+        padding-bottom: 1.5rem;
+    }
+
+    .activity-item::before {
+        content: '';
+        position: absolute;
+        left: -2rem;
+        top: 0;
+        width: 1px;
+        height: 100%;
+        background: #ddd;
+    }
+
+    .activity-item::after {
+        content: '';
+        position: absolute;
+        left: -2.35rem;
+        top: 0.5rem;
+        width: 0.7rem;
+        height: 0.7rem;
+        border-radius: 50%;
+        background: #007bff;
+    }
+
+    .activity-time {
+        font-size: 0.8rem;
+        color: #666;
+    }
+
+    .activity-text {
+        margin: 0.5rem 0;
+    }
+
+    .prediction-history table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .prediction-history th,
+    .prediction-history td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+
+    .prediction-history th {
+        background: #f8f9fa;
+        font-weight: 600;
+    }
+
+    .prediction-history tr:hover {
+        background: #f8f9fa;
+    }
+
+    .category-analysis {
+        height: 300px;
+    }
+
+    @media (max-width: 768px) {
+        .profile-content {
+            grid-template-columns: 1fr;
+        }
+
+        .profile-header {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .profile-stats {
+            justify-content: center;
+        }
+    }
+
+    .logo-container {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding: 1rem;
+        animation: fadeInDown 1s ease-out;
+    }
+
+    .logo-wrapper {
+        display: inline-flex;
+        align-items: center;
+        gap: 1rem;
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        padding: 1rem 2rem;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .logo-wrapper:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .logo-icon {
+        font-size: 2.5rem;
+        color: #007bff;
+        background: linear-gradient(135deg, #007bff 0%, #00bfff 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: heartbeat 1.5s infinite;
+        position: relative;
+    }
+
+    .logo-icon::before {
+        display: none;
+    }
+
+    @keyframes heartbeat {
+        0% {
+            transform: scale(1);
+        }
+        14% {
+            transform: scale(1.1);
+        }
+        28% {
+            transform: scale(1);
+        }
+        42% {
+            transform: scale(1.1);
+        }
+        70% {
+            transform: scale(1);
+        }
+    }
+
+    .logo-text {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .logo-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #333;
+        letter-spacing: -1px;
+        line-height: 1;
+    }
+
+    .logo-title .highlight {
+        color: #007bff;
+        position: relative;
+        display: inline-block;
+    }
+
+    .logo-title .highlight::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, #007bff, #00bfff);
+        border-radius: 2px;
+    }
+
+    .logo-tagline {
+        font-size: 0.9rem;
+        color: #444;
+        margin-top: 0.2rem;
+        font-weight: 600;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .logo-wrapper {
+            padding: 0.8rem 1.5rem;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+        }
+
+        .logo-title {
+            font-size: 2rem;
+        }
+
+        .logo-tagline {
+            font-size: 0.8rem;
+        }
+    }
+    </style>
+
+    <script>
+    // Global variables to store all data
+    let feedbackData = {
+        helpful: 0,
+        notHelpful: 0,
+        predictions: {
+            truePositive: 0,
+            trueNegative: 0,
+            falsePositive: 0,
+            falseNegative: 0
+        },
+        accuracy: [], // Will store accuracy over time
+        categories: {
+            'Politics': 0,
+            'Technology': 0,
+            'Health': 0,
+            'Entertainment': 0,
+            'Sports': 0,
+            'Other': 0
+        },
+        timeData: {
+            labels: [],
+            fakeCount: [],
+            realCount: []
+        }
+    };
+
+    // Function to calculate accuracy
+    function calculateAccuracy() {
+        const total = feedbackData.predictions.truePositive + 
+                     feedbackData.predictions.trueNegative + 
+                     feedbackData.predictions.falsePositive + 
+                     feedbackData.predictions.falseNegative;
+        
+        if (total === 0) return 0;
+        
+        return Math.round(((feedbackData.predictions.truePositive + feedbackData.predictions.trueNegative) / total) * 100);
+    }
+
+    // Function to update time data
+    function updateTimeData(isFake) {
+        const now = new Date();
+        const timeLabel = now.toLocaleTimeString();
+        
+        // Keep only last 6 data points
+        if (feedbackData.timeData.labels.length >= 6) {
+            feedbackData.timeData.labels.shift();
+            feedbackData.timeData.fakeCount.shift();
+            feedbackData.timeData.realCount.shift();
+        }
+
+        feedbackData.timeData.labels.push(timeLabel);
+        
+        if (isFake) {
+            feedbackData.timeData.fakeCount.push((feedbackData.timeData.fakeCount[feedbackData.timeData.fakeCount.length - 1] || 0) + 1);
+            feedbackData.timeData.realCount.push(feedbackData.timeData.realCount[feedbackData.timeData.realCount.length - 1] || 0);
+        } else {
+            feedbackData.timeData.fakeCount.push(feedbackData.timeData.fakeCount[feedbackData.timeData.fakeCount.length - 1] || 0);
+            feedbackData.timeData.realCount.push((feedbackData.timeData.realCount[feedbackData.timeData.realCount.length - 1] || 0) + 1);
+        }
+    }
+
+    // Function to update category data
+    function updateCategoryData(category) {
+        if (feedbackData.categories.hasOwnProperty(category)) {
+            feedbackData.categories[category]++;
+        } else {
+            feedbackData.categories['Other']++;
+        }
+    }
+
+    // Function to update accuracy data
+    function updateAccuracyData() {
+        const currentAccuracy = calculateAccuracy();
+        
+        // Keep only last 4 data points
+        if (feedbackData.accuracy.length >= 4) {
+            feedbackData.accuracy.shift();
+        }
+        feedbackData.accuracy.push(currentAccuracy);
+    }
+
+    // Function to update all charts
+    function updateCharts() {
+        // Update Time Trend Chart
+        const timeTrendCtx = document.getElementById('timeTrendChart');
+        if (timeTrendCtx) {
+            const timeTrendChart = Chart.getChart(timeTrendCtx);
+            if (timeTrendChart) {
+                timeTrendChart.data.labels = feedbackData.timeData.labels;
+                timeTrendChart.data.datasets[0].data = feedbackData.timeData.fakeCount;
+                timeTrendChart.data.datasets[1].data = feedbackData.timeData.realCount;
+                timeTrendChart.update();
+            }
+        }
+
+        // Update Prediction Chart
+        const predictionCtx = document.getElementById('predictionChart');
+        if (predictionCtx) {
+            const predictionChart = Chart.getChart(predictionCtx);
+            if (predictionChart) {
+                predictionChart.data.datasets[0].data = [
+                    feedbackData.predictions.truePositive,
+                    feedbackData.predictions.trueNegative,
+                    feedbackData.predictions.falsePositive,
+                    feedbackData.predictions.falseNegative
+                ];
+                predictionChart.update();
+            }
+        }
+
+        // Update Category Chart
+        const categoryCtx = document.getElementById('categoryChart');
+        if (categoryCtx) {
+            const categoryChart = Chart.getChart(categoryCtx);
+            if (categoryChart) {
+                categoryChart.data.datasets[0].data = Object.values(feedbackData.categories);
+                categoryChart.update();
+            }
+        }
+
+        // Update Accuracy Chart
+        const accuracyCtx = document.getElementById('accuracyChart');
+        if (accuracyCtx) {
+            const accuracyChart = Chart.getChart(accuracyCtx);
+            if (accuracyChart) {
+                accuracyChart.data.datasets[0].data = feedbackData.accuracy;
+                accuracyChart.update();
+            }
+        }
+
+        // Update Feedback Chart
+        const feedbackCtx = document.getElementById('feedbackChart');
+        if (feedbackCtx) {
+            const feedbackChart = Chart.getChart(feedbackCtx);
+            if (feedbackChart) {
+                feedbackChart.data.datasets[0].data = [feedbackData.helpful, feedbackData.notHelpful];
+                feedbackChart.update();
+            }
+        }
+    }
+
+    // Function to handle prediction result
+    function handlePredictionResult(prediction, actual, category) {
+        // Update prediction counts
+        if (prediction === actual) {
+            if (prediction === 'fake') {
+                feedbackData.predictions.truePositive++;
+            } else {
+                feedbackData.predictions.trueNegative++;
+            }
+        } else {
+            if (prediction === 'fake') {
+                feedbackData.predictions.falsePositive++;
+            } else {
+                feedbackData.predictions.falseNegative++;
+            }
+        }
+
+        // Update time data
+        updateTimeData(actual === 'fake');
+
+        // Update category data
+        updateCategoryData(category);
+
+        // Update accuracy data
+        updateAccuracyData();
+
+        // Update all charts
+        updateCharts();
+    }
+
+    // Add event listeners for prediction results
+    document.addEventListener('DOMContentLoaded', function() {
+        // Listen for prediction results from your main application
+        window.addEventListener('predictionResult', function(e) {
+            handlePredictionResult(e.detail.prediction, e.detail.actual, e.detail.category);
+        });
+
+        // Add event listeners for feedback buttons
+        document.getElementById('thumbsUp')?.addEventListener('click', () => {
+            feedbackData.helpful++;
+            updateCharts();
+        });
+
+        document.getElementById('thumbsDown')?.addEventListener('click', () => {
+            feedbackData.notHelpful++;
+            updateCharts();
+        });
+    });
+
+    // Word Cloud Implementation with fixed shaking and click interaction
+    function initializeWordCloud() {
+        const wordCloudContainer = document.getElementById('wordCloud');
+        if (wordCloudContainer) {
+            // Clear previous word cloud
+            wordCloudContainer.innerHTML = '';
+
+            // Add tooltip element
+            const tooltip = document.createElement('div');
+            tooltip.className = 'word-cloud-tooltip';
+            wordCloudContainer.appendChild(tooltip);
+
+            const words = [
+                {text: "Fake News", size: 50, count: 150},
+                {text: "Politics", size: 45, count: 120},
+                {text: "Technology", size: 40, count: 100},
+                {text: "Health", size: 35, count: 80},
+                {text: "Entertainment", size: 30, count: 70},
+                {text: "Sports", size: 25, count: 60},
+                {text: "Business", size: 20, count: 50},
+                {text: "Science", size: 20, count: 45},
+                {text: "Education", size: 15, count: 40},
+                {text: "Environment", size: 15, count: 35},
+                {text: "Crime", size: 15, count: 30},
+                {text: "Culture", size: 15, count: 25},
+                {text: "Media", size: 15, count: 20},
+                {text: "Social", size: 15, count: 15},
+                {text: "Digital", size: 15, count: 10}
+            ];
+
+            const width = wordCloudContainer.clientWidth;
+            const height = wordCloudContainer.clientHeight;
+
+            const layout = d3.layout.cloud()
+                .size([width, height])
+                .words(words)
+                .padding(5)
+                .rotate(() => 0)
+                .font("Arial")
+                .fontSize(d => d.size)
+                .on("end", draw);
+
+            layout.start();
+
+            function draw(words) {
+                const svg = d3.select(wordCloudContainer)
+                    .append("svg")
+                    .attr("width", layout.size()[0])
+                    .attr("height", layout.size()[1])
+                    .append("g")
+                    .attr("transform", `translate(${layout.size()[0] / 2},${layout.size()[1] / 2})`);
+
+                const textElements = svg.selectAll("text")
+                    .data(words)
+                    .enter()
+                    .append("text")
+                    .style("font-size", d => `${d.size}px`)
+                    .style("font-family", "Arial")
+                    .style("fill", () => d3.schemeCategory10[~~(Math.random() * 10)])
+                    .attr("text-anchor", "middle")
+                    .attr("class", "word-cloud-text")
+                    .attr("transform", d => `translate(${d.x},${d.y})`)
+                    .text(d => d.text)
+                    .on("click", function(event, d) {
+                        // Remove active class from all words
+                        d3.selectAll(".word-cloud-text").classed("active", false);
+                        // Add active class to clicked word
+                        d3.select(this).classed("active", true);
+                        
+                        // Show tooltip with count
+                        tooltip.style.display = "block";
+                        tooltip.innerHTML = `${d.text}<br>Count: ${d.count}`;
+                        tooltip.style.left = (event.pageX + 10) + "px";
+                        tooltip.style.top = (event.pageY - 10) + "px";
+                    });
+
+                // Hide tooltip when clicking outside
+                d3.select(document).on("click", function(event) {
+                    if (!event.target.classList.contains("word-cloud-text")) {
+                        d3.selectAll(".word-cloud-text").classed("active", false);
+                        tooltip.style.display = "none";
+                    }
+                });
+
+                // Update tooltip position on mouse move
+                textElements.on("mousemove", function(event) {
+                    if (d3.select(this).classed("active")) {
+                        tooltip.style.left = (event.pageX + 10) + "px";
+                        tooltip.style.top = (event.pageY - 10) + "px";
+                    }
+                });
+            }
+        }
+    }
+
+    function initializeCharts() {
+        // Time-based Trend Chart
+        const timeTrendCtx = document.getElementById('timeTrendChart');
+        if (timeTrendCtx) {
+            new Chart(timeTrendCtx.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Fake News',
+                        data: [65, 59, 80, 81, 56, 55],
+                        borderColor: 'rgb(255, 99, 132)',
+                        tension: 0.1
+                    }, {
+                        label: 'Real News',
+                        data: [28, 48, 40, 19, 86, 27],
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Monthly News Distribution'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Prediction Breakdown Chart
+        const predictionCtx = document.getElementById('predictionChart');
+        if (predictionCtx) {
+            new Chart(predictionCtx.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['True Positive', 'True Negative', 'False Positive', 'False Negative'],
+                    datasets: [{
+                        data: [120, 150, 30, 20],
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.6)',
+                            'rgba(54, 162, 235, 0.6)',
+                            'rgba(255, 99, 132, 0.6)',
+                            'rgba(255, 159, 64, 0.6)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Model Prediction Statistics'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Category Distribution Chart
+        const categoryCtx = document.getElementById('categoryChart');
+        if (categoryCtx) {
+            new Chart(categoryCtx.getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Politics', 'Technology', 'Health', 'Entertainment', 'Sports', 'Other'],
+                    datasets: [{
+                        data: [30, 20, 15, 15, 10, 10],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.6)',
+                            'rgba(54, 162, 235, 0.6)',
+                            'rgba(255, 206, 86, 0.6)',
+                            'rgba(75, 192, 192, 0.6)',
+                            'rgba(153, 102, 255, 0.6)',
+                            'rgba(255, 159, 64, 0.6)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'News Categories'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Accuracy Over Time Chart
+        const accuracyCtx = document.getElementById('accuracyChart');
+        if (accuracyCtx) {
+            new Chart(accuracyCtx.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                    datasets: [{
+                        label: 'Accuracy %',
+                        data: [85, 88, 92, 95],
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Model Accuracy Progress'
+                        }
+                    }
+                }
+            });
+        }
+
+        // User Feedback Chart
+        const feedbackCtx = document.getElementById('feedbackChart');
+        if (feedbackCtx) {
+            new Chart(feedbackCtx.getContext('2d'), {
+                type: 'pie',
+                data: {
+                    labels: ['Helpful', 'Not Helpful'],
+                    datasets: [{
+                        data: [75, 25],
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.6)',
+                            'rgba(255, 99, 132, 0.6)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'User Feedback Distribution'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize word cloud
+        initializeWordCloud();
+
+        // Add event listeners for feedback buttons
+        document.getElementById('thumbsUp')?.addEventListener('click', () => {
+            feedbackData.helpful++;
+            updateCharts();
+        });
+
+        document.getElementById('thumbsDown')?.addEventListener('click', () => {
+            feedbackData.notHelpful++;
+            updateCharts();
+        });
+    }
+
+    // Update resize handler with improved debouncing
+    let resizeTimeout;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function() {
+            const wordCloudContainer = document.getElementById('wordCloud');
+            if (wordCloudContainer) {
+                initializeWordCloud();
+            }
+        }, 500); // Increased debounce time for better stability
+    });
+
+    // Sidebar expand/collapse on hover near left edge
+    const sidebar = document.getElementById('sidebar');
+    const hoverZone = document.getElementById('sidebarHoverZone');
+    hoverZone.addEventListener('mouseenter', () => sidebar.classList.add('expanded'));
+    sidebar.addEventListener('mouseleave', () => sidebar.classList.remove('expanded'));
+    hoverZone.addEventListener('mouseleave', () => {
+        setTimeout(() => {
+            if (!sidebar.matches(':hover')) sidebar.classList.remove('expanded');
+        }, 100);
+    });
+
+    // Tooltip logic for collapsed state
+    document.querySelectorAll('.sidebar-link').forEach(link => {
+        link.addEventListener('mouseenter', function() {
+            if (!sidebar.classList.contains('expanded')) {
+                const tooltip = document.createElement('div');
+                tooltip.className = 'sidebar-tooltip';
+                tooltip.innerText = this.getAttribute('data-tooltip');
+                document.body.appendChild(tooltip);
+                const rect = this.getBoundingClientRect();
+                tooltip.style.top = rect.top + 'px';
+                tooltip.style.left = (rect.right + 8) + 'px';
+                this._tooltip = tooltip;
+            }
+        });
+        link.addEventListener('mouseleave', function() {
+            if (this._tooltip) {
+                document.body.removeChild(this._tooltip);
+                this._tooltip = null;
+            }
+        });
+    });
+
+    // Modal popup logic
+    function showFileErrorModal() {
+        document.getElementById('fileErrorModal').style.display = 'flex';
+        document.getElementById('mainContent').classList.add('blurred');
+    }
+    function hideFileErrorModal() {
+        document.getElementById('fileErrorModal').style.display = 'none';
+        document.getElementById('mainContent').classList.remove('blurred');
+    }
+    document.getElementById('closeModalBtn').onclick = hideFileErrorModal;
+
+    // Upload file logic with PDF support
+    document.getElementById('uploadFileBtn').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const textarea = document.getElementById('newsInput');
+        if (file.type === 'text/plain') {
+            // .txt file
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                textarea.value = evt.target.result;
+            };
+            reader.readAsText(file);
+        } else if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
+            // .pdf file using pdf.js
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                const typedarray = new Uint8Array(evt.target.result);
+                pdfjsLib.getDocument({data: typedarray}).promise.then(function(pdf) {
+                    let textPromises = [];
+                    for (let i = 1; i <= pdf.numPages; i++) {
+                        textPromises.push(pdf.getPage(i).then(page => page.getTextContent()));
+                    }
+                    Promise.all(textPromises).then(pages => {
+                        let text = pages.map(page => page.items.map(item => item.str).join(' ')).join('\n');
+                        textarea.value = text;
+                    });
+                }).catch(function() {
+                    showFileErrorModal();
+                });
+            };
+            reader.readAsArrayBuffer(file);
+        } else if (file.name.endsWith('.doc') || file.name.endsWith('.docx')) {
+            // .doc/.docx file: show error or handle with backend
+            alert('Word file upload is supported, but text extraction will be handled on the server after upload.');
+            // Optionally, you can send the file to the backend here
+        } else {
+            showFileErrorModal();
+        }
+    });
+
+    // Stats Panel Logic
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add click event listener for Stats button
+        const statsButton = document.querySelector('.sidebar-link[data-tooltip="Stats"]');
+        if (statsButton) {
+            statsButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                const statsOverlay = document.getElementById('statsOverlay');
+                if (statsOverlay) {
+                    statsOverlay.style.display = 'block';
+                    initializeCharts();
+                }
+            });
+        }
+
+        // Add click event listener for back button
+        const statsBackBtn = document.getElementById('statsBackBtn');
+        if (statsBackBtn) {
+            statsBackBtn.addEventListener('click', function() {
+                const statsOverlay = document.getElementById('statsOverlay');
+                if (statsOverlay) {
+                    statsOverlay.style.display = 'none';
+                }
+            });
+        }
+    });
+
+    // Profile Panel Logic
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add click event listener for Profile button
+        const profileButton = document.querySelector('.sidebar-link[data-tooltip="Profile"]');
+        if (profileButton) {
+            profileButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                const profileOverlay = document.getElementById('profileOverlay');
+                if (profileOverlay) {
+                    profileOverlay.style.display = 'block';
+                    initializeProfileCharts();
+                }
+            });
+        }
+
+        // Add click event listener for back button
+        const profileBackBtn = document.getElementById('profileBackBtn');
+        if (profileBackBtn) {
+            profileBackBtn.addEventListener('click', function() {
+                const profileOverlay = document.getElementById('profileOverlay');
+                if (profileOverlay) {
+                    profileOverlay.style.display = 'none';
+                }
+            });
+        }
+    });
+
+    // Function to initialize profile charts
+    function initializeProfileCharts() {
+        // User Category Chart
+        const userCategoryCtx = document.getElementById('userCategoryChart');
+        if (userCategoryCtx) {
+            new Chart(userCategoryCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(feedbackData.categories),
+                    datasets: [{
+                        data: Object.values(feedbackData.categories),
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.6)',
+                            'rgba(54, 162, 235, 0.6)',
+                            'rgba(255, 206, 86, 0.6)',
+                            'rgba(75, 192, 192, 0.6)',
+                            'rgba(153, 102, 255, 0.6)',
+                            'rgba(255, 159, 64, 0.6)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Your News Categories'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update profile stats
+        updateProfileStats();
+    }
+
+    // Function to update profile statistics
+    function updateProfileStats() {
+        const totalPredictions = Object.values(feedbackData.predictions).reduce((a, b) => a + b, 0);
+        const accuracy = calculateAccuracy();
+        const totalFeedback = feedbackData.helpful + feedbackData.notHelpful;
+
+        // Update stats display
+        document.querySelector('.stat-item:nth-child(1) .stat-value').textContent = totalPredictions;
+        document.querySelector('.stat-item:nth-child(2) .stat-value').textContent = accuracy + '%';
+        document.querySelector('.stat-item:nth-child(3) .stat-value').textContent = totalFeedback;
+
+        // Update activity timeline
+        updateActivityTimeline();
+    }
+
+    // Function to update activity timeline
+    function updateActivityTimeline() {
+        const timeline = document.querySelector('.activity-timeline');
+        if (!timeline) return;
+
+        // Clear existing activities
+        timeline.innerHTML = '';
+
+        // Add recent activities
+        const activities = [
+            { time: 'Just now', text: 'Analyzed news article' },
+            { time: '5 minutes ago', text: 'Provided feedback on prediction' },
+            { time: '1 hour ago', text: 'Uploaded document for analysis' }
+        ];
+
+        activities.forEach(activity => {
+            const activityItem = document.createElement('div');
+            activityItem.className = 'activity-item';
+            activityItem.innerHTML = `
+                <div class="activity-time">${activity.time}</div>
+                <div class="activity-text">${activity.text}</div>
+            `;
+            timeline.appendChild(activityItem);
+        });
+    }
+    </script>
+</body>
+</html>
