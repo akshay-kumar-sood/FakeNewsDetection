@@ -9,7 +9,8 @@ This project is a **Fake News Detection system** developed to detect and classif
 
 ### Images
 
-![Project Overview](photos/fake_news_detection.pdf%20(1).png)  
+![Project Overview](photos/fake_news_detection.pdf_(1).png
+)  
 *Project overview screenshot*
 
 ![Example 1](photos/fake.jpg)  
