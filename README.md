@@ -16,8 +16,6 @@ This project is a **Fake News Detection system** developed to detect and classif
 ![Example 1](photos/fake.jpg)  
 *Example input news image*
 
-![Example 2](photos/tru.jpg)  
-*Another example input image*
 
 ### PDF
 
